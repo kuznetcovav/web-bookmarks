@@ -1,0 +1,5 @@
+.mypy_cache
+.vscode
+logs
+src/bookmarks/.env
+src/bookmarks/__pycache__
