@@ -13,6 +13,8 @@ from bookmarks.log import get_logger, redirect_basic_logging
 from bookmarks.schema import Bookmark, ScopedSession
 
 
+api_route = config.api_route
+
 L = get_logger('api', logging.DEBUG)
 redirect_basic_logging(L, logging.INFO)
 
@@ -26,7 +28,7 @@ def init_app():
 
 
 # GET bookmark
-@app.route('/api/bookmarks/<string:bookmark_id_str>', methods=['GET'])
+@app.route(api_route('/bookmarks/<string:bookmark_id_str>'), methods=['GET'])
 @public_api(app)
 def bookmarks_get(bookmark_id_str: str) -> ApiResponse:
     try:
@@ -43,7 +45,7 @@ def bookmarks_get(bookmark_id_str: str) -> ApiResponse:
 
 
 # GET bookmarks list
-@app.route('/api/bookmarks', methods=['GET'])
+@app.route(api_route('/bookmarks'), methods=['GET'])
 @public_api(app)
 def bookmarks_list() -> ApiResponse:
     with ScopedSession() as session:
@@ -75,7 +77,7 @@ def _parse_bookmark(data: bytes) -> _BookmarkParseResult:
 
 
 # Create new bookmark
-@app.route('/api/bookmarks', methods=['POST'])
+@app.route(api_route('/bookmarks'), methods=['POST'])
 @public_api(app)
 def bookmarks_post() -> ApiResponse:
     res = _parse_bookmark(flask.request.data)
@@ -91,7 +93,7 @@ def bookmarks_post() -> ApiResponse:
 
 
 # Update an existing bookmark
-@app.route('/api/bookmarks/<string:bookmark_id_str>', methods=['PUT'])
+@app.route(api_route('/bookmarks/<string:bookmark_id_str>'), methods=['PUT'])
 @public_api(app)
 def bookmarks_put(bookmark_id_str: str) -> ApiResponse:
     try:
@@ -118,7 +120,7 @@ def bookmarks_put(bookmark_id_str: str) -> ApiResponse:
 
 
 # Delete an existing bookmark
-@app.route('/api/bookmarks/<string:bookmark_id_str>', methods=['DELETE'])
+@app.route(api_route('/bookmarks/<string:bookmark_id_str>'), methods=['DELETE'])
 @public_api(app)
 def bookmarks_delete(bookmark_id_str: str) -> ApiResponse:
     try:
