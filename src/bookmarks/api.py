@@ -43,30 +43,13 @@ def bookmarks_get(bookmark_id_str: str) -> ApiResponse:
 
 
 # GET bookmarks list
-# Params:
-# - after_id (int, optional): the last bookmark on the previous page
-# - limit (int, optional, less than DEFAULT_LIST_LIMIT): the maximum amount of entries in the list
 @app.route('/api/bookmarks', methods=['GET'])
 @public_api(app)
 def bookmarks_list() -> ApiResponse:
-    try:
-        after_id = int(flask.request.args.get('after_id') or 0)
-    except ValueError:
-        return ApiResponse.error('Invalid after_id (should be integer)')
-    
-    try:
-        limit = int(flask.request.args.get('limit') or config.DEFAULT_LIST_LIMIT)
-    except ValueError:
-        return ApiResponse.error('Invalid limit (should be integer)')
-    
-    if limit > config.MAX_LIST_LIMIT or limit <= 0:
-        return ApiResponse.error(f'Invalid limit, should be positive and less than {config.MAX_LIST_LIMIT + 1}')
-    
     with ScopedSession() as session:
         total_count = session.query(Bookmark).count()
         
-        query = session.query(Bookmark).filter(Bookmark.id > after_id).limit(limit)
-        bookmarks = query.all()
+        bookmarks = session.query(Bookmark).all()
         bookmarks_serialized = [bookmark.serialize() for bookmark in sorted(bookmarks, key=lambda b: b.id)]
         return ApiResponse.success({'total_count': total_count, 'bookmarks': bookmarks_serialized})
 

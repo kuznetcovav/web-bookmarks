@@ -12,9 +12,6 @@ SECRET_KEY: str = config('SECRET_KEY')
 
 TIMEZONE: str = config('TIMEZONE')
 
-DEFAULT_LIST_LIMIT: int = config('DEFAULT_LIST_LIMIT', cast=int)
-MAX_LIST_LIMIT: int = config('MAX_LIST_LIMIT', cast=int)
-
 
 def get_log_path(filename: str) -> pathlib.Path:
     return LOGS_DIR.joinpath(filename)
