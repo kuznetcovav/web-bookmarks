@@ -3,3 +3,4 @@
 logs
 src/bookmarks/.env
 src/bookmarks/__pycache__
+tests/__pycache__
