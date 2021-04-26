@@ -21,7 +21,7 @@ class ApiResponse:
         return ApiResponse(data={}, status='error', error_message=error_message, http_status=http_status)
 
     @staticmethod
-    def success(data: dict, http_status: HTTPStatus = HTTPStatus.OK) -> ApiResponse:
+    def success(data: Any, http_status: HTTPStatus = HTTPStatus.OK) -> ApiResponse:
         return ApiResponse(data=data, status='success', error_message=None, http_status=http_status)
 
     def _make_api_response(self, app: flask.Flask, is_public_api: bool) -> flask.Response:

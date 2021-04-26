@@ -51,7 +51,7 @@ def bookmarks_list() -> ApiResponse:
         
         bookmarks = session.query(Bookmark).all()
         bookmarks_serialized = [bookmark.serialize() for bookmark in sorted(bookmarks, key=lambda b: b.id)]
-        return ApiResponse.success({'total_count': total_count, 'bookmarks': bookmarks_serialized})
+        return ApiResponse.success(bookmarks_serialized)
 
 
 @dataclasses.dataclass
