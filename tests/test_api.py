@@ -111,6 +111,26 @@ class TestPost:
         
         assert len(saved_ids) == BOOKMARKS_COUNT
 
+    def test_id_ignored(self, api, api_route, add_bookmark):
+        EXISTING_ID = 42
+        # Make sure the newly added bookmark's id would not == EXISTING_ID
+        add_bookmark(Bookmark(id=EXISTING_ID, url='nop', title='nop', comment='nop'))
+        
+        b = Bookmark(id=EXISTING_ID, url='test url', title='test title', comment='test comment')
+        
+        r = api.post(api_route('/bookmarks'), json=b.serialize())
+        assert r.status_code == HTTPStatus.CREATED
+        
+        resp = json.loads(r.data)
+        assert resp['status'] == 'success'
+        assert isinstance(resp['data'], dict)
+        
+        deserialized = Bookmark.deserialize(resp['data'])
+        assert deserialized.id != EXISTING_ID
+        assert deserialized.url == b.url
+        assert deserialized.title == b.title
+        assert deserialized.comment == b.comment
+    
 
 class TestPut:
     def test_update_single(self, api, api_route, add_bookmark, get_all_bookmarks, db_session):

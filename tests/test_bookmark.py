@@ -130,7 +130,7 @@ class TestDeserialize:
             b = Bookmark.deserialize(serialized)
 
 
-class TestDeserializeNoId:
+class TestDeserializeIgnoreId:
     def test_normal(self):
         b_url, b_title, b_comment = (
             'http://example.com',
@@ -143,23 +143,32 @@ class TestDeserializeNoId:
             'title': b_title,
             'comment': b_comment
         }
-        b = Bookmark.deserialize_without_id(serialized)
+        b = Bookmark.deserialize_ignore_id(serialized)
         
         assert b.id is None
         assert b.url == b_url
         assert b.title == b_title
         assert b.comment == b_comment
 
-    def test_id_prohibited(self): 
+    def test_id_ignore(self): 
+        b_url, b_title, b_comment = (
+            'http://example.com',
+            'Example title',
+            'Example comment'
+        )   
         serialized = {
-            'id': 1,
-            'url': 'nop',
-            'title': 'nop',
-            'comment': 'nop'
+            'id': 16,
+            'url': b_url,
+            'title': b_title,
+            'comment': b_comment
         }
         
-        with pytest.raises(ValueError):
-            b = Bookmark.deserialize_without_id(serialized)
+        b = Bookmark.deserialize_ignore_id(serialized)
+        
+        assert b.id is None  # ID is idnored
+        assert b.url == b_url
+        assert b.title == b_title
+        assert b.comment == b_comment
     
 
     def test_url_required(self):
@@ -169,7 +178,7 @@ class TestDeserializeNoId:
         }
         
         with pytest.raises(ValueError):
-            b = Bookmark.deserialize_without_id(serialized)
+            b = Bookmark.deserialize_ignore_id(serialized)
     
     def test_title_required(self):
         serialized = {
@@ -178,7 +187,7 @@ class TestDeserializeNoId:
         }
         
         with pytest.raises(ValueError):
-            b = Bookmark.deserialize_without_id(serialized)
+            b = Bookmark.deserialize_ignore_id(serialized)
     
     def test_comment_required(self):
         serialized = {
@@ -187,7 +196,7 @@ class TestDeserializeNoId:
         }
         
         with pytest.raises(ValueError):
-            b = Bookmark.deserialize_without_id(serialized)
+            b = Bookmark.deserialize_ignore_id(serialized)
     
     def test_excess_field(self):
         serialized = {
@@ -198,4 +207,4 @@ class TestDeserializeNoId:
         }
         
         with pytest.raises(ValueError):
-            b = Bookmark.deserialize_without_id(serialized)
+            b = Bookmark.deserialize_ignore_id(serialized)

@@ -49,5 +49,7 @@ class Bookmark(Base):
         return Bookmark(**{key: data[key] for key in allowed_keys})
 
     @staticmethod
-    def deserialize_without_id(data: dict) -> Bookmark:
-        return Bookmark.deserialize(data, Bookmark._FIELDS - set((Bookmark._ID_FIELD,)))
+    def deserialize_ignore_id(data: dict) -> Bookmark:
+        if Bookmark._ID_FIELD in data:
+            del data[Bookmark._ID_FIELD]
+        return Bookmark.deserialize(data, Bookmark._REQUIRED_FIELDS)

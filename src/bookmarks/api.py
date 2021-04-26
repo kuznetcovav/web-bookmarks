@@ -69,7 +69,7 @@ def _parse_bookmark(data: bytes) -> _BookmarkParseResult:
         return _BookmarkParseResult(None, ApiResponse.error(f'JSON decoding error: {"".join(e.args)}'))
     
     try:
-        bookmark = Bookmark.deserialize_without_id(bookmark_dict)
+        bookmark = Bookmark.deserialize_ignore_id(bookmark_dict)
     except ValueError as e:
         return _BookmarkParseResult(None, ApiResponse.error(f'Invalid bookmark data: {"".join(e.args)}'))
 
