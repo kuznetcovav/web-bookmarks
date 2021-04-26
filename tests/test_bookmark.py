@@ -28,6 +28,22 @@ class TestSerialize:
         assert serialized['title'] == ''
         assert serialized['comment'] == '' 
 
+    def test_without_id(self):
+        b_id, b_url, b_title, b_comment = (
+            1,
+            'http://example.com',
+            'Example title',
+            'Example comment'
+        )
+        b = Bookmark(id=b_id, url=b_url, title=b_title, comment=b_comment)
+        serialized = b.serialize_without_id()
+        
+        assert serialized['url'] == b_url
+        assert serialized['title'] == b_title
+        assert serialized['comment'] == b_comment
+
+        assert 'id' not in serialized
+
 
 class TestDeserialize:
     def test_normal(self):
@@ -145,6 +161,7 @@ class TestDeserializeNoId:
         with pytest.raises(ValueError):
             b = Bookmark.deserialize_without_id(serialized)
     
+
     def test_url_required(self):
         serialized = {
             'title': 'nop',
