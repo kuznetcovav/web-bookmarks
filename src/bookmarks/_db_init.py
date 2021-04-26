@@ -1,4 +1,5 @@
-from bookmarks._db import Base, engine
+from bookmarks._db_base import Base
+from bookmarks._db import engine
 
 
 def create_database() -> None:

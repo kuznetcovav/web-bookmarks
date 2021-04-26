@@ -5,7 +5,7 @@ from typing import Optional, Set
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import Session
 
-from bookmarks._db import Base, ScopedSession
+from bookmarks._db_base import Base
 
 
 class Bookmark(Base):
