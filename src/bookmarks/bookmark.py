@@ -20,11 +20,14 @@ class Bookmark(Base):
     _ID_FIELD = 'id'
     _REQUIRED_FIELDS = _FIELDS - set((_ID_FIELD,))
     
-    def serialize(self) -> dict:
+    def serialize(self, fields: Set[str] = _FIELDS) -> dict:
         return {
             field: getattr(self, field)
-            for field in Bookmark._FIELDS
+            for field in fields
         }
+
+    def serialize_without_id(self) -> dict:
+        return self.serialize(Bookmark._REQUIRED_FIELDS)
 
     @staticmethod
     def deserialize(data: dict, fields: Set[str] = _FIELDS) -> Bookmark:
